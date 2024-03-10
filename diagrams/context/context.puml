@@ -1,18 +1,12 @@
 @startuml
-cloud Облако as cloud
+circle Девайс as device
+rectangle Шлюз as gateway
 actor Клиент as user
-rectangle Auth as auth
-rectangle Gateway as gateway
-rectangle Hub as hub
-circle Девайс as device1
+cloud Облако as cloud
 
 user --> gateway : Запрос данных в облако
 gateway --> cloud : Данные
-device1 --> hub : Данные
-gateway --> hub : Запросить данные
-hub --> gateway : Данные
-gateway --> auth : Аутентификация
-auth --> gateway : Ответ
+device --> gateway : Данные
 user -..> cloud : Получить данные
 cloud -..> user : Данные
 @enduml
