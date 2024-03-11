@@ -1,0 +1,14 @@
+@startuml
+circle Девайс as device
+rectangle Шлюз as gateway
+actor Клиент as user
+cloud Облако as cloud
+
+user --> gateway : Запрос данных в облако
+gateway --> cloud : Данные
+device --> gateway : Данные
+user -..> cloud : Получить данные
+cloud -..> user : Данные
+@enduml
+
+
