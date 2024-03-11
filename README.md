@@ -24,8 +24,8 @@
 
 ![alt text](diagrams/context/context.png)
 
-
 ## Базовый сценарий
+![basic_scenary](diagrams/basicScenary/basic_scenary.png)
 
 ## Основные блоки шлюза
 | Компонент |Описание                        | 
@@ -37,3 +37,5 @@
 ## Архитектура (HLA) v.0.01
 ![alt text](diagrams/architectory-hla-0-01/architectory-0-01.png)
 
+## Базовый сценарий + HLA
+![basic_scenary_hla](diagrams/basicScenaryHla/basic_scenary_hla.png)
