@@ -1,0 +1,9 @@
+@startuml
+actor Клиент as user
+participant Шлюз as gateway
+participant Облако as cloud
+
+user -> gateway: Запрос на получение данных в облаке
+gateway -> cloud: Данные
+cloud --> user: Получение данных из облака
+@enduml
