@@ -1,12 +1,15 @@
 @startuml
 actor Клиент as user
+participant Облако as cloud
 participant Gateway as gateway
 participant Hub as hub
-participant Облако as cloud
+participant Auth as auth
 
 user -> gateway: Запрос на получение данных в облаке
 gateway -> hub: Запрос на получение данных
 hub -> gateway: Данные
+gateway -> auth: Аутентификация девайсов, отправивших данные
+auth -> gateway: Список данных, устройства которых прошли аутентификацию
 gateway -> cloud: Данные
 cloud --> user: Получение данных из облака
 @enduml

@@ -38,4 +38,4 @@
 ![alt text](diagrams/architectory-hla-0-01/architectory-0-01.png)
 
 ## Базовый сценарий + HLA
-![basic_scenary_hla](diagrams/basicScenaryHla/basic-scenary-hla.png)
+![alt text](diagrams/basicScenaryHla/basic-scenary-hla.png)
