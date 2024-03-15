@@ -48,3 +48,14 @@
 4. Шлюз обрабатывает только аутентичные запросы от авторизованных клиентов
 ### Предположения безопасности 
 1. Девайсы благонадёжны
+
+
+## Негативные сценарии
+### Негативный сценарий 1. В облако попадают данные от неаутентичных девайсов.
+![alt text](diagrams/negative_scenarios/SG-1/Negative-scenario.Attack-on-Auth.SG-1.png)
+### Негативный сценарий 2. В облако передаются невалидные данные.
+![alt text](diagrams/negative_scenarios/SG-2/Negative-scenario.Attack-on-Hub.SG-2.png)
+### Негативный сценарий 3. Данные передаются в неаутентичное и неавторизованное облако
+![alt text](diagrams/negative_scenarios/SG-3/Negative-scenario.Attack-on-Gateway.SG-3.png)
+### Негативный сценарий 4. Шлюз обрабатывает неаутентичные запросы от неавторизованных клиентов
+![alt text](diagrams/negative_scenarios/SG-4/Negative-scenario.Attack-on-Gateway.SG-4.png)
