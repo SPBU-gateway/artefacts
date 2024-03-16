@@ -14,10 +14,9 @@ endlegend
 
 cloud Облако as cloud
 actor Клиент as user
-rectangle Gateway as gateway #line:Orange;line.bold
 rectangle DeviceAuth as auth #line:Green;line.bold
 rectangle Hub as hub #line:Red;line.bold
-rectangle ManagerOutput as out #line:Red;line.bold
+rectangle ManagerOutput as out #line:Orange;line.bold
 rectangle ManagerInput as in #line:Orange;line.bold
 rectangle ClientAuth as auth2 #line:green;line.bold
 rectangle Storage as storage #line:red;line.bold
@@ -29,12 +28,11 @@ auth2 --[#Green]>in: Ответ
 in --[#Green]> out: Запрос данных в облако
 out --[#Red]> storage: Запрос получения данных
 storage --[#Red]> out: Данные
-out --[#Red]> gateway: Данные
-gateway --[#Green]> cloud : Данные
+out --[#Green]> cloud : Данные
 device1 --[#red]> hub : Данные
 hub --[#Red]> storage: Данные устройств
-gateway --[#Green]> auth : Аутентификация устройств
-auth --[#Green]> gateway : Ответ
+out --[#Green]> auth : Аутентификация устройств
+auth --[#Green]> out : Ответ
 user -..> cloud : Получить данные
 cloud -..> user : Данные
 @endumls

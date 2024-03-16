@@ -4,7 +4,6 @@ database Облако as cloud
 participant ClientAuth as auth2
 participant ManagerInput as in
 participant Auth as auth
-participant Gateway as gateway
 participant ManagerOutput as out
 database Storage as storage
 participant Hub as hub
@@ -22,9 +21,8 @@ in <- auth2: Ответ
 in -> out: Запрос отправки данных в облако
 out -> storage: Запрос получения данных
 out <- storage: Данные
-out -> gateway: Данные
-gateway -> auth: Аутентификация устройств
-gateway <- auth: Ответ
-gateway -> cloud: Данные
+out -> auth: Аутентификация устройств
+out <- auth: Ответ
+out -> cloud: Данные
 end
 @enduml
