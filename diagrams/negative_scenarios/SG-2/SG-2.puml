@@ -1,0 +1,18 @@
+@startuml
+title "Негативный сценарий. Атака на Hub. Нарушение ЦБ 2"
+actor Клиент as user
+participant Облако as cloud
+participant Gateway as gateway 
+participant Hub as hub #red
+participant Auth as auth 
+
+user -> gateway: Запрос на получение данных в облаке
+gateway -> hub: Запрос на получение данных
+hub -[#red]> gateway: Невалидные данные
+gateway -> auth: Аутентификация девайсов, отправивших данные
+auth -> gateway: Список данных, устройства которых прошли аутентификацию
+group #red Атака 
+gateway -> cloud: Данные
+cloud --> user: Получение данных из облака
+end
+@enduml

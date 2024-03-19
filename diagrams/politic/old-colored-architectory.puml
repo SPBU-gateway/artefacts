@@ -1,0 +1,31 @@
+@startuml
+
+skinparam arrowthickness 3
+skinparam defaultFontName Arial
+skinparam defaultFontSize 18
+skinparam roundCorner 50
+
+legend right
+    |Цвет| Описание |
+    |<#green>| Доверенный компонент|
+    |<#orange>| Повышающий доверие компонент|
+    |<#red>| Недоверенный компонент|
+endlegend
+
+cloud Облако as cloud
+actor Клиент as user
+rectangle Auth as auth #line:Green;line.bold
+rectangle Gateway as gateway #line:Orange;line.bold
+rectangle Hub as hub #line:Orange;line.bold
+circle Девайс as device1
+
+user --[#red]> gateway: Запрос данных в облако
+gateway --[#Green]> cloud : Данные
+device1 --[#red]> hub : Данные
+gateway --[#Green]> hub : Запросить данные
+hub --[#Green]> gateway : Данные
+gateway --[#Green]> auth : Аутентификация
+auth --[#Green]> gateway : Ответ
+user -..> cloud : Получить данные
+cloud -..> user : Данные
+@endumls
