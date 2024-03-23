@@ -1,0 +1,26 @@
+@startuml
+title "Базовый сценарий. Передача данных девайсов"
+actor Клиент as user
+participant ClientAuth as auth2
+participant ManagerInput as in
+database Облако as cloud
+participant ManagerOutput as out
+database Storage as storage
+participant Hub as hub
+entity Device as device
+
+group Непрерывная передача данных
+device -> hub: Данные
+hub -> storage: Данные
+end
+
+group Запрос данных в облако
+user -> in: Запрос получения данных в облако
+in -> auth2: Аутентификация клиента
+in <- auth2: Ответ
+in -> out: Запрос отправки данных в облако
+out -> storage: Запрос получения данных
+out <- storage: Данные
+out -> cloud: Данные
+end
+@enduml

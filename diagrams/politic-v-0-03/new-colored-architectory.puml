@@ -1,0 +1,69 @@
+@startuml
+
+skinparam arrowthickness 3
+skinparam defaultFontName Arial
+skinparam defaultFontSize 18
+skinparam roundCorner 50
+
+legend right
+    |Цвет| Описание |
+    |<#green>| Доверенный компонент|
+    |<#orange>| Повышающий доверие компонент|
+    |<#red>| Недоверенный компонент|
+endlegend
+
+cloud Облако as cloud
+actor Клиент as user
+
+rectangle ManagerInput as in #line:Orange;line.bold
+rectangle ClientAuth as auth2 #line:green;line.bold
+
+rectangle Verifier as verifier #line:Green;line.bold
+rectangle MainManagerOutput as mainOut #line:Orange;line.bold
+rectangle MainStorage as mainStorage #line:red;line.bold
+
+rectangle ManagerOutput as out #line:Red;line.bold
+rectangle Storage as storage #line:red;line.bold
+
+rectangle Network{
+
+    rectangle Devices{
+        (КритическийДевайс) as mainDevice #green
+        (ПлохойДевайс) as angryDevice2 #red
+        (Девайс) as device #green
+        (ПлохойДевайс) as angryDevice1 #red
+    }
+
+    rectangle Hubs{
+        rectangle Hub as hub #line:Red;line.bold
+        rectangle MainHub as mainHub #line:Red;line.bold
+    }
+
+    angryDevice2 -[#Red]-> mainHub
+    mainDevice -[#green]-> mainHub
+    mainHub --[#Red]> mainStorage
+
+    device -[#green]-> hub
+    angryDevice1 -[#Red]-> hub
+    hub --[#Red]> storage
+}
+
+user -[#red]-> in: Запрос данных в облако
+in -[#Green]-> auth2
+auth2 -.[#Green].>in
+in --[#Green]> mainOut: Запрос данных в облако
+mainOut --[#Red]> mainStorage: Запрос получения данных
+mainStorage -.[#Red].> mainOut: Данные
+mainOut --[#Green]> cloud
+mainOut --[#Green]> verifier
+verifier --[#Green]> mainOut
+
+user --> cloud : Получить данные
+cloud -..> user : Данные
+
+in --[#Red]> out : Запрос данных в облако
+out --[#Red]> storage : Запрос получения данных
+storage -.[#Red].> out : Данные
+out --[#Red]> cloud
+
+@endumls
