@@ -82,12 +82,12 @@
 ## Новая архитектура v.0.02
 | Компонент |Описание                        | Сложность |Размер|
 |-----------|--------------------------------|--|--|
-|DeviceAuth|Выполняет аутентификацию устройств| S | S |
+|DeviceAuth|Выполняет аутентификацию устройств| S | XL |
 |HUB|Получает данные от девайсов и передаёт в storage| S | S |
-|Storage|Хранит последние данные девайсов| S | S |
-|ManagerOutput|Валидирует данные, отправляет данные в облако| S | M |
-|ClientAuth|Аутентификация клиентов| S | S |
-|ManagerInput|Получает запрос от клиентов, валидирует полученные данные| S | S |
+|Storage|Хранит последние данные девайсов| S | XL |
+|ManagerOutput|Валидирует данные, отправляет данные в облако| M | M |
+|ClientAuth|Аутентификация клиентов| C | XL |
+|ManagerInput|Получает запрос от клиентов, валидирует полученные данные| M | M |
 
 ![alt text](diagrams/politic/new-colored-architectory.png)
 
@@ -135,3 +135,5 @@
 ![alt text](diagrams/politic-v-0-03/main-basic-scenary.png)
 
 ![alt text](diagrams/politic-v-0-03/basic-scenary.png)
+
+![alt text](diagrams/politic-v-0-03/register-device.png)
