@@ -58,11 +58,11 @@ mainHub --[#Red]> mainStorage
 hub --[#Red]> storage
 user -[#red]-> in
 in -[#Green]-> auth2
-auth2 -[#Red]-> cs
+auth2 -[#Green]-> cs
 cs .[#Red].> auth2
 auth2 .[#Green].>in
 in --[#Green]> mainOut
-mainOut --[#Red]> mainStorage
+mainOut --[#Green]> mainStorage
 mainStorage .[#Red].> mainOut
 mainOut --[#Green]> cloud
 mainOut --[#Green]> verifier
@@ -73,7 +73,7 @@ verifier --[#Green]> mainOut
 user --> cloud
 cloud -..> user
 
-in --[#Red]> out
+in --[#Green]> out
 out --[#Red]> storage
 storage .[#Red].> out
 out --[#Red]> cloud
