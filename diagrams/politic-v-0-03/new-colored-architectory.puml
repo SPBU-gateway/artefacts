@@ -15,55 +15,69 @@ endlegend
 cloud Облако as cloud
 actor Клиент as user
 
-rectangle ManagerInput as in #line:Orange;line.bold
-rectangle ClientAuth as auth2 #line:green;line.bold
 
-rectangle Verifier as verifier #line:Green;line.bold
-rectangle MainManagerOutput as mainOut #line:Orange;line.bold
-rectangle MainStorage as mainStorage #line:red;line.bold
+rectangle "Шлюз" #line.dashed{
+    
 
-rectangle ManagerOutput as out #line:Red;line.bold
-rectangle Storage as storage #line:red;line.bold
+    rectangle Hub as hub #line:Red;line.bold
+    rectangle ManagerOutput as out #line:Red;line.bold
+    rectangle Storage as storage #line:red;line.bold
 
-rectangle Network{
+    rectangle ClientStorage as cs #line:red;line.bold
+    rectangle ClientAuth as auth2 #line:Orange;line.bold
 
-    rectangle Devices{
-        (КритическийДевайс) as mainDevice #green
-        (ПлохойДевайс) as angryDevice2 #red
-        (Девайс) as device #green
-        (ПлохойДевайс) as angryDevice1 #red
-    }
+    rectangle ManagerInput as in #line:Orange;line.bold
 
-    rectangle Hubs{
-        rectangle Hub as hub #line:Red;line.bold
-        rectangle MainHub as mainHub #line:Red;line.bold
-    }
+    rectangle Verifier as verifier #line:Orange;line.bold
+    rectangle DeviceStorage as ds #line:red;line.bold
+    rectangle MainManagerOutput as mainOut #line:Orange;line.bold
+    rectangle MainStorage as mainStorage #line:red;line.bold
+    rectangle MainHub as mainHub #line:Red;line.bold
+} 
 
-    angryDevice2 -[#Red]-> mainHub
-    mainDevice -[#green]-> mainHub
-    mainHub --[#Red]> mainStorage
 
-    device -[#green]-> hub
-    angryDevice1 -[#Red]-> hub
-    hub --[#Red]> storage
-}
+    (КритическийДевайс) as mainDevice #green
+    (ПлохойДевайс) as angryDevice2 #red
+    (Девайс) as device #green
+    (ПлохойДевайс) as angryDevice1 #red
 
-user -[#red]-> in: Запрос данных в облако
+    rectangle "Среда передачи данных" as net #line:Red;line.bold
+
+    angryDevice2 -[#Red]-> net
+    mainDevice -[#green]-> net
+    net -[#red]-> mainHub
+
+
+    device -[#green]-> net
+    angryDevice1 -[#Red]-> net
+    net -[#red]-> hub
+
+
+
+mainHub --[#Red]> mainStorage
+hub --[#Red]> storage
+user -[#red]-> in
 in -[#Green]-> auth2
-auth2 -.[#Green].>in
-in --[#Green]> mainOut: Запрос данных в облако
-mainOut --[#Red]> mainStorage: Запрос получения данных
-mainStorage -.[#Red].> mainOut: Данные
+auth2 -[#Red]-> cs
+cs .[#Red].> auth2
+auth2 .[#Green].>in
+in --[#Green]> mainOut
+mainOut --[#Red]> mainStorage
+mainStorage .[#Red].> mainOut
 mainOut --[#Green]> cloud
 mainOut --[#Green]> verifier
+verifier --[#Green]> ds
+ds .[#Red].> verifier
 verifier --[#Green]> mainOut
 
-user --> cloud : Получить данные
-cloud -..> user : Данные
+user --> cloud
+cloud -..> user
 
-in --[#Red]> out : Запрос данных в облако
-out --[#Red]> storage : Запрос получения данных
-storage -.[#Red].> out : Данные
+in --[#Red]> out
+out --[#Red]> storage
+storage .[#Red].> out
 out --[#Red]> cloud
+
+
 
 @endumls

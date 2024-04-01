@@ -6,6 +6,7 @@ participant ClientAuth as auth2
 participant ManagerInput as in
 participant verifier as auth
 participant MainManagerOutput as out
+participant DeviceStorage as ds
 database MainStorage as storage
 participant MainHub as hub
 entity MainDevice as device
@@ -18,12 +19,14 @@ end
 group Запрос данных в облако
 user -> in: Запрос получения данных в облако
 in -> auth2: Аутентификация клиента
-in <- auth2: Ответ
+in <-- auth2: Ответ
 in -> out: Запрос отправки данных в облако
 out -> storage: Запрос получения данных
-out <- storage: Данные
+out <-- storage: Данные
 out -> auth: Аутентификация устройств
-out <- auth: Ответ
+auth -> ds: Запрос получения секретов устройства
+ds --> auth: Секреты
+out <-- auth: Ответ
 out -> cloud: Данные
 end
 @enduml
