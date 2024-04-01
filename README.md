@@ -128,7 +128,7 @@
 |ManagerInput|Получает запрос от клиентов и передаёт их в ManagerOutput и MainManagerOutput| S | S |
 |Hub|Получает данные от девайсов и передаёт в Storage| S | S |
 |Storage|Хранит последние данные девайсов| L | XL |
-|ManagerOutput|Отправляет данные в облако после| S | S |
+|ManagerOutput|Отправляет данные в облако| S | S |
 |DeviceStorage|Хранит данные ключевых девайсов|C|XL|
 
 ### Негативные сценарии
@@ -138,6 +138,8 @@
 
 ### Архитектура
 ![alt text](diagrams/politic-v-0-03/colored-architecture.png)
+
+![alt text](image.png)
 
 ### Базовый сценарий
 
