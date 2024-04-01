@@ -139,8 +139,6 @@
 ### Архитектура
 ![alt text](diagrams/politic-v-0-03/colored-architecture.png)
 
-![alt text](image.png)
-
 ### Базовый сценарий
 
 ![alt text](diagrams/politic-v-0-03/main-basic-scenary.png)
