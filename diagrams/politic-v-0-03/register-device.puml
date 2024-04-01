@@ -1,0 +1,18 @@
+@startuml
+title "Базовый сценарий. Регистрация нового ключевого девайса"
+actor Клиент as user
+participant ClientAuth as auth2
+participant ManagerInput as in
+participant verifier as auth
+participant MainManagerOutput as out
+database DeviceStorage as ds
+
+group Регистрация нового критического устройства
+user -> in: Данные нового устройства
+in -> auth2: Аутентификация клиента
+in <- auth2: Ответ
+in -> out: Данные нового устройства
+out -> verifier: Данные нового устройства
+verifier -> ds: Данные нового устройства
+end
+@enduml
