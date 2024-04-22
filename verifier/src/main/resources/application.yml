@@ -3,16 +3,6 @@ spring:
     url: jdbc:postgresql://device-storage:5432/postgres
     username: postgres
     password: postgres
-  data:
-    redis:
-      host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
-      password: ${REDIS_PASSWORD}
-    cache:
-      type: redis
-      cache-names: redis-cache
-      redis:
-        time-to-live: ${REDIS_CACHE_TIME}
 
   kafka:
     listener.ack-mode: manual

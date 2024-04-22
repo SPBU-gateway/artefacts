@@ -22,4 +22,21 @@ public class Secret {
         byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
         return new String(decryptedBytes);
     }
+
+    public static String encrypt(String key, String message) throws Exception {
+        SecretKeySpec keySpec = new SecretKeySpec(key.getBytes(), "AES");
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec);
+        byte[] encryptedBytes = cipher.doFinal(message.getBytes());
+        return Base64.getEncoder().encodeToString(encryptedBytes);
+    }
+
+    public static String decrypt(String key, String encryptedMessage) throws Exception {
+        SecretKeySpec keySpec = new SecretKeySpec(key.getBytes(), "AES");
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.DECRYPT_MODE, keySpec);
+        byte[] encryptedBytes = Base64.getDecoder().decode(encryptedMessage);
+        byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
+        return new String(decryptedBytes);
+    }
 }

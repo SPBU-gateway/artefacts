@@ -19,7 +19,7 @@
 }
 ```
 
-## Для to-verifier-auth
+## Для to-verifier
 
 ```
 {

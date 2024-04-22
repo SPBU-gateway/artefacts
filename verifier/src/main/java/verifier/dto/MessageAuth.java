@@ -11,5 +11,6 @@ import java.util.List;
 public class MessageAuth {
     private String from;
     private String to;
+    private String address;
     private List<Device> devices;
 }

@@ -15,7 +15,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
-import verifier.dto.MessageToAuth;
+import verifier.dto.MessageAuth;
 import verifier.dto.NewDevice;
 
 import java.util.Map;
@@ -32,7 +32,7 @@ public class Kafka {
         this.properties = properties;
     }
     @Bean(ALL_ACKS_KAFKA_TEMPLATE)
-    public KafkaTemplate<String, MessageToAuth> allAcksKafkaTemplate() {
+    public KafkaTemplate<String, MessageAuth> allAcksKafkaTemplate() {
         return new KafkaTemplate<>(producerFactory(
                 props -> {
                     props.put(ProducerConfig.ACKS_CONFIG, "all");
@@ -40,7 +40,7 @@ public class Kafka {
         );
     }
 
-    private ProducerFactory<String, MessageToAuth> producerFactory(
+    private ProducerFactory<String, MessageAuth> producerFactory(
             final Consumer<Map<String, Object>> enchanter
     ) {
         var props = properties.buildProducerProperties();
@@ -58,23 +58,6 @@ public class Kafka {
         enchanter.accept(props);
         return new DefaultKafkaProducerFactory<>(props);
     }
-    @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, MessageToAuth>
-    kafkaListenerContainerFactory() {
-        var props = properties.buildConsumerProperties();
-        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
-        props.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed");
-        ConcurrentKafkaListenerContainerFactory<String, MessageToAuth>
-                factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(
-                new DefaultKafkaConsumerFactory<>(
-                        props,
-                        new StringDeserializer(),
-                        new JsonDeserializer<>(MessageToAuth.class)
-                )
-        );
-        return factory;
-    }
 
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, NewDevice>
@@ -89,6 +72,22 @@ public class Kafka {
                         props,
                         new StringDeserializer(),
                         new JsonDeserializer<>(NewDevice.class)
+                )
+        );
+        return factory;
+    }
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, MessageAuth> messageAuthConsumer(){
+        var props = properties.buildConsumerProperties();
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
+        props.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed");
+        ConcurrentKafkaListenerContainerFactory<String, MessageAuth>
+                factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(
+                new DefaultKafkaConsumerFactory<>(
+                        props,
+                        new StringDeserializer(),
+                        new JsonDeserializer<>(MessageAuth.class)
                 )
         );
         return factory;

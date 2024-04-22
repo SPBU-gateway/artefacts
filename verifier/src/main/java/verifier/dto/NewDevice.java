@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class NewDevice {
+    String from;
+    String to;
     String name;
     String password;
 }
