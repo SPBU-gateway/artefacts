@@ -1,0 +1,21 @@
+networks:
+  kafka-net:
+    name: kafka-net
+    driver: bridge
+
+services:
+  device-storage:
+    networks:
+      - kafka-net
+    image: bitnami/postgresql:15
+    container_name: device-storage
+    env_file:
+      - .env
+    ports:
+      - "5440:5432"
+    volumes:
+      - device-storage-data:/var/lib/postgresql/data/
+      - ./db-init/:/docker-entrypoint-initdb.d/
+
+volumes:
+  device-storage-data:
