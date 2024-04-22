@@ -1,0 +1,17 @@
+networks:
+  kafka-net:
+    name: kafka-net
+    driver: bridge
+  api-net:
+    name: api-net
+    driver: bridge
+
+services:
+
+  verifier:
+    container_name: verifier
+    networks:
+      - kafka-net
+    build:
+      context: .
+      dockerfile: Dockerfile

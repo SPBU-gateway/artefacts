@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://device-storage:5432/postgres
+    username: postgres
+    password: postgres
+
+  kafka:
+    listener.ack-mode: manual
+    bootstrap-servers:
+     - kafka-1:9092

@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MessageToAuth {
+public class MessageAuth {
     private String from;
     private String to;
     private List<Device> devices;
