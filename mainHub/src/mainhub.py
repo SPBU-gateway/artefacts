@@ -5,7 +5,6 @@ from consumer import start_consumer
 from producer import start_producer
 from multiprocessing import Queue
 
-
 if __name__ == "__main__":
     
     parser = ArgumentParser()
