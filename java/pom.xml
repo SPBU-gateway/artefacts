@@ -18,6 +18,9 @@
         <module>verifier</module>
         <module>MainManagerOutput</module>
         <module>DeviceStorage</module>
+        <module>ClientStorage</module>
+        <module>ClientAuth</module>
+        <module>ManagerInput</module>
     </modules>
 
     <properties>

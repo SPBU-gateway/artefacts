@@ -4,49 +4,48 @@
 * monitor
 
 # Используемые сообщения (Примеры)
-## Для monitor 
+## monitor 
 ```
+key: default
 {
-	"from": "Verifier",
-	"to": "ManagerOutput",
-	"address": "зашифрованый адресс",
+	"address": "bTQRCsFOQKQO98nRUXNR87XxNuTcR7L32Yj/VG8r5W8=",
 	"devices": [
 		{
-			"name": "device1",
-			"password": "VLf5DbMKoYYb+pualiE9CA==",
-			"message": "Message1"
+			"name": "vvRNyDH0gbjLyNRILIeZZQ==",
+			"password": "Hu3DoIwxL7/fol4enqQK6zErQ8Lo+9OVN6ivCiajTeA=",
+			"message": "UXv155brNtuLBKzkWCy0uA=="
 		}
 	]
 }
-```
-
-## Для to-device-storage
-
-```
+headers:
 {
-	"from": "ManagerOutput",
-	"to": "Verifier",
-	"address": "зашифрованый адресс",
+	"from": "device-storage",
+	"to": "verifier"
+}
+```
+
+## verifier-device-storage
+
+```
+key: default
+{
+	"address": "bTQRCsFOQKQO98nRUXNR87XxNuTcR7L32Yj/VG8r5W8=",
 	"devices": [
 		{
-			"name": "зашифрованное имя",
-			"password": "VLf5DbMKoYYb+pualiE9CA==",
-			"message": "зашифрованное сообщение"
+			"name": "vvRNyDH0gbjLyNRILIeZZQ==",
+			"message": "UXv155brNtuLBKzkWCy0uA=="
 		},
 		{
-			"name": "зашифрованное имя",
-			"password": "VLf5DbMKoYYb+pualiE9CA==",
-			"message": "зашифрованное сообщение"
+			"name": "vvrNyDH0gbjLyNRILIeZZQ==",
+			"message": "UXv155brNtuLBKzkWCy0ua="
 		}
 	]
 }
 ```
-
-## Для to-verifier-new-device
-
 ```
+key: new-device
 {
-	"name": "зашифрованное имя",
-	"password": "зашифрованное пароль"
+	"name": "vvRNyDH0gbjLyNRILIeZZQ==",
+	"password": "Hu3DoIwxL7/fol4enqQK6zErQ8Lo+9OVN6ivCiajTeA="
 }
 ```
