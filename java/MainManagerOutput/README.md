@@ -4,20 +4,7 @@
 * monitor
 
 # Используемые сообщения (Примеры)
-## monitor 
-```
-{
-	"from": "Verifier",
-	"to": "ManagerOutput",
-	"devices": [
-		{
-			"name": "device1",
-			"password": "VLf5DbMKoYYb+pualiE9CA==",
-			"message": "Message1"
-		}
-	]
-}
-```
+## monitor
 ```
 key: default
 {
