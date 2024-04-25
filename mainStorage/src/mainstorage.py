@@ -12,14 +12,17 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
 
-    config = {'bootstrap.servers': 'kafka-1:9092', # сервер кафки
-    'group.id': 'update_demo_manager',
-    'auto.offset.reset': 'earliest'  # начальная точка чтения (earliest or latest)}
+    config = {
+        'bootstrap.servers': 'kafka-1:9092', # сервер кафки
+        'group.id': 'update_demo_manager',
+        'auto.offset.reset': 'earliest'  # начальная точка чтения (earliest or latest)}
     }
 
     requests_queue = Queue()
-
+    print("starting fastapi")
     start_fastapi_in_thread(requests_queue)
+    print("starting consumer")
     start_consumer(args, config)
+    print("starting producer")
     start_producer(args, config, requests_queue)
     
