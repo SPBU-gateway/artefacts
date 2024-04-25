@@ -1,0 +1,13 @@
+networks:
+  kafka-net:
+    name: kafka-net
+    driver: bridge
+
+services:
+  client-storage-api:
+    container_name: client-storage-api
+    networks:
+      - kafka-net
+    build:
+      context: .
+      dockerfile: Dockerfile
