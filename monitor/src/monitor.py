@@ -8,6 +8,7 @@ from producer import start_producer
 
 from confluent_kafka.admin import AdminClient, NewTopic
 
+
 def newTopics(config_parser):
     admin_client = AdminClient({
         "bootstrap.servers": "kafka-1:9092"
@@ -29,6 +30,7 @@ def newTopics(config_parser):
             print(f"Топик '{topic}' успешно создан")
         except Exception as e:
             print(f"Ошибка при создании топика '{topic}': {e}")
+
 
 if __name__ == '__main__':
     # Parse the command line.

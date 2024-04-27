@@ -61,7 +61,7 @@ services:
     networks:
       - kafka-net
     ports:
-      - "5002:5002"
+      - "81:81"
 
   db:
     container_name: db

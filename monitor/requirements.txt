@@ -1,4 +1,3 @@
 confluent-kafka==2.0.2
 configparser
-flask
 python-dotenv

@@ -1,6 +1,3 @@
-# implements Kafka topic consumer functionality
-
-
 import threading
 from confluent_kafka import Consumer, OFFSET_BEGINNING
 import json
@@ -10,7 +7,7 @@ from producer import proceed_to_deliver
 
 def handle_event(id, details):    
     # print(f"[debug] handling event {id}, {details}")
-    print(f"[info] handling event {id}, {details['source']}->{details['deliver_to']}: {details['operation']}")
+    print(f"[info] handling event {id}, {details['from']}->{details['to']}")
     if check_operation(id, details):
         proceed_to_deliver(id, details)
     else:
@@ -49,11 +46,7 @@ def consumer_job(args, config):
         while True:
             msg = monitor_consumer.poll(1.0)
             if msg is None:
-                # Initial message consumption may take up to
-                # `session.timeout.ms` for the consumer group to
-                # rebalance and start consuming
-                # print("Waiting...")
-                pass
+                continue
             elif msg.error():
                 print(f"[error] {msg.error()}")
             else:
@@ -61,8 +54,7 @@ def consumer_job(args, config):
                 try:
                     id = msg.key().decode('utf-8')
                     details_str = msg.value().decode('utf-8')
-                    # print("[debug] consumed event from topic {topic}: key = {key:12} value = {value:12}".format(
-                    #     topic=msg.topic(), key=id, value=details_str))
+                    print("[debug] consumed event from topic {topic}: key = {key:12} value = {value:12}".format(topic=msg.topic(), key=id, value=details_str))
                     handle_event(id, json.loads(details_str))
                 except Exception as e:
                     print(
@@ -80,3 +72,4 @@ def start_consumer(args, config):
 
 if __name__ == '__main__':
     start_consumer(None)
+    

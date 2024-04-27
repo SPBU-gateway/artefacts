@@ -16,7 +16,7 @@ _requests_queue: multiprocessing.Queue = None
 
 def proceed_to_deliver(details, id=1):
     print(f"[debug] queueing for delivery event id: {id}, payload: {details}")
-    data = {"devices": details}
+    data = {"device": details}
     _requests_queue.put(data)
     return data
 
@@ -34,7 +34,7 @@ def producer_job(_, config, requests_queue: multiprocessing.Queue):
 
     while True:
         event_details = requests_queue.get()                
-        producer.produce('main-hub-monitor', json.dumps(event_details), "default", headers={"from": "main-storage", "to": "main-manager-output"}, callback=delivery_callback)
+        producer.produce('monitor', json.dumps(event_details), "default", headers={"from": "main-hub", "to": "main-storage"}, callback=delivery_callback)
         
         producer.poll(10000)
         producer.flush()

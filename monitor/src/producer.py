@@ -31,7 +31,7 @@ def producer_job(_, config, requests_queue: multiprocessing.Queue):
 
     while True:
         event_details = requests_queue.get()
-        topic = event_details['deliver_to']
+        topic = event_details['from'] + '-' + event_details['to']
         producer.produce(topic, json.dumps(event_details), event_details['id'],
             callback=delivery_callback
         )
@@ -46,3 +46,4 @@ def start_producer(args, config, requests_queue):
 
 if __name__ == '__main__':
     start_producer(None, None, None)
+    

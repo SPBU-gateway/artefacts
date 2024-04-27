@@ -60,7 +60,7 @@ services:
     networks:
       - kafka-net
     ports:
-      - "5002:5002"
+      - "80:80"
 
 
       
