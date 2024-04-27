@@ -26,7 +26,7 @@ def consumer_job(args, config):
                 p.offset = OFFSET_BEGINNING
             verifier_consumer.assign(partitions)
 
-    topic = "main-hub-main-storage"
+    topic = "hub-storage"
     verifier_consumer.subscribe([topic], on_assign=reset_offset)
     
     try:

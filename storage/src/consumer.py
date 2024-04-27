@@ -7,13 +7,17 @@ from typing import Dict
 
 
 def handle_event(id: str, headers: Dict, details: Dict):
+    # print(f"[debug] handling event {id}, {details}")
+    # details = json.loads(msg.value().decode('utf-8'))
+    # print("handled details")
+    # hd = json.loads(msg.headers().decode('utf-8'))
     print(f"[debug] handling event {id}, {headers}, {details}")
     print(f"[info] handling event {id}, {headers['from']}->{headers['to']}.")
-    # try:
-    #     pass
-    #     
-    # except Exception as e:
-    #     print(f"[error] failed to handle request: {e}")
+    try:
+        details['devices'] = api.get_data()
+        proceed_to_deliver(id=id, details=details)
+    except Exception as e:
+        print(f"[error] failed to handle request: {e}")
 
 
 def consumer_job(args, config):
@@ -26,7 +30,7 @@ def consumer_job(args, config):
                 p.offset = OFFSET_BEGINNING
             verifier_consumer.assign(partitions)
 
-    topic = "main-hub-main-storage"
+    topic = "manager-output-storage"
     verifier_consumer.subscribe([topic], on_assign=reset_offset)
     
     try:
@@ -62,6 +66,4 @@ def start_consumer(args, config):
 
 if __name__ == '__main__':
     start_consumer(None, None) 
-    
-    ##{"from": "asd", "to": "asldads"}  {"address": "asd"}
     
