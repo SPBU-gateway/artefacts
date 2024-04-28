@@ -2,20 +2,23 @@ import base64
 VERIFIER_SEAL = 'verifier_seal'
 
 
-def check_operation(id, details):
+def check_operation(id, headers):
     authorized = False
-    # print(f"[debug] checking policies for event {id}, details: {details}")
+    # print(f"[debug] checking policies for event {id}, headers: {headers}")
     print(f"[info] checking policies for event {id},"
-          f" {details['from']}->{details['to']}")
-    src = details['from']
-    dst = details['to']
+          f" {headers['from']}->{headers['to']}")
+    src = headers['from']
+    dst = headers['to']
 
     # CE
     if src == 'main-hub' and dst == 'main-storage' and id == 'default':
         authorized = True
     elif src == 'main-storage' and dst == 'main-manager-output' and id == 'default':
         authorized = True
-    
+    elif src == 'hub' and dst == 'storage' and id == 'default':
+        authorized = True
+    elif src == 'storage' and dst == 'manager-output' and id == 'default':
+        authorized = True
     # ASA 
     # client-auth
     elif src == 'client-auth' and dst == 'manager-input' and (id == 'default' or id == 'new-device'):

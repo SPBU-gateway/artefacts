@@ -11,7 +11,7 @@ import json
 
 
 
-DB_URL = "postgresql://postgres:1234@db:5432/Storage"
+DB_URL = "postgresql://postgres:1234@db-storage:5432/Storage"
 engine = create_engine(DB_URL)
 
 session = sessionmaker(engine, expire_on_commit=False)
@@ -19,6 +19,8 @@ db = session()
 
 app = FastAPI()
 Base = declarative_base()
+
+
 
 
 class DeviceDataBase(BaseModel):
@@ -33,24 +35,31 @@ class DeviceData(Base):
     name = Column(String, index=True)
     message = Column(String, index=True)
     
+    def as_dict(self):
+        return {'name': self.name, 'message': self.message}
+
 
 Base.metadata.create_all(bind=engine)
     
 
 @app.post("/data")
-async def create_data(device: DeviceDataBase):
-    data = DeviceData(name=device.name, message=device.message)
+def create_data(device: DeviceDataBase):
+    print(f'creating data: {device}')
+    data = DeviceData(name=device['name'], message=device['message'])
     db.add(data)
     db.commit()
     db.refresh(data)
     
     return data
+    
 
 
 @app.get("/data")
 def get_data():
-    query = db.query(DeviceData)
-    return json.dumps(query.all())
+    query = db.query(DeviceData).all()
+    result = [i.as_dict() for i in query]
+    print(f'result is {result}')
+    return result
 
 
 @app.delete("/data")
@@ -73,7 +82,7 @@ def start_fastapi_in_thread(requests_queue=None):
     global _requests_queue
     _requests_queue = requests_queue
     host_name = "0.0.0.0"  # Укажите ваш хост
-    port = 8001  # Укажите ваш порт
+    port = 82  # Укажите ваш порт
     thread = Thread(target=lambda: run_rest(host_name, port))
     thread.start()
 

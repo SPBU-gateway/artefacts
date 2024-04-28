@@ -53,6 +53,5 @@ services:
     image: monitor
     build:
       context: .
-      dockerfile: Dockerfile
     networks:
       - kafka-net

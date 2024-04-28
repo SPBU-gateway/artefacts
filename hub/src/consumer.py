@@ -6,9 +6,9 @@ import threading
 from typing import Dict
 
 
-def handle_event(id: str, headers: Dict, details: Dict):
-    print(f"[debug] handling event {id}, {headers}, {details}")
-    print(f"[info] handling event {id}, {headers['from']}->{headers['to']}.")
+def handle_event(id: str, details: Dict):
+    print(f"[debug] handling event {id}, {details}")
+    print(f"[info] handling event {id}.")
     # try:
     #     pass
     #     
@@ -26,7 +26,7 @@ def consumer_job(args, config):
                 p.offset = OFFSET_BEGINNING
             verifier_consumer.assign(partitions)
 
-    topic = "hub-storage"
+    topic = "hub"
     verifier_consumer.subscribe([topic], on_assign=reset_offset)
     
     try:
@@ -41,7 +41,7 @@ def consumer_job(args, config):
                     id = msg.key()
                     print("handling ", id)
                     details = msg.value().decode('utf-8')
-                    handle_event(id, {"from": details['from'], "to": details['to']}, details=json.loads(details))
+                    handle_event(id, details=json.loads(details))
                 except Exception as e:
                     print(f"[error] Malformed event received from topic {topic}: {msg.value()}. {e}")
     except KeyboardInterrupt:

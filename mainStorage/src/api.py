@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, class_mapper
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from pydantic import BaseModel
 from threading import Thread
@@ -11,7 +11,7 @@ import json
 
 
 
-DB_URL = "postgresql://postgres:1234@db:5432/MainStorage"
+DB_URL = "postgresql://postgres:1234@db-main-storage:5432/MainStorage"
 engine = create_engine(DB_URL)
 
 session = sessionmaker(engine, expire_on_commit=False)
@@ -33,13 +33,18 @@ class DeviceData(Base):
     name = Column(String, index=True)
     message = Column(String, index=True)
     
-
-Base.metadata.create_all(bind=engine)
+    def as_dict(self):
+        return {'name': self.name, 'message': self.message}
+    
     
 
+Base.metadata.create_all(bind=engine)
+
+
 @app.post("/maindata")
-async def create_data(device: DeviceDataBase):
-    data = DeviceData(name=device.name, message=device.message)
+def create_data(device: DeviceDataBase):
+    print(f'creating data: {device}')
+    data = DeviceData(name=device['name'], message=device['message'])
     db.add(data)
     db.commit()
     db.refresh(data)
@@ -49,8 +54,10 @@ async def create_data(device: DeviceDataBase):
 
 @app.get("/maindata")
 def get_data():
-    query = db.query(DeviceData)
-    return json.dumps(query.all())
+    query = db.query(DeviceData).all()
+    result = [i.as_dict() for i in query]
+    print(f'result is {result}')
+    return result
 
 
 @app.delete("/maindata")
@@ -69,11 +76,12 @@ def run_rest(host: str, port: int):
     uvicorn.run(app, host=host, port=port, log_level='info')
     print(f"Started run_rest")
 
+
 def start_fastapi_in_thread(requests_queue=None):
     global _requests_queue
     _requests_queue = requests_queue
-    host_name = "127.0.0.1"  # Укажите ваш хост
-    port = 8000  # Укажите ваш порт
+    host_name = "0.0.0.0"  # Укажите ваш хост
+    port = 81  # Укажите ваш порт
     thread = Thread(target=lambda: run_rest(host_name, port))
     thread.start()
 

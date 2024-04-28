@@ -6,16 +6,24 @@ import threading
 from typing import Dict
 
 
-def handle_event(id: str, headers: Dict, details: Dict):
+topic_check = "manager-output-storage"
+topic_add = "hub-storage"
+
+
+def handle_event(id: str, details: Dict, topic: str):
     # print(f"[debug] handling event {id}, {details}")
     # details = json.loads(msg.value().decode('utf-8'))
     # print("handled details")
     # hd = json.loads(msg.headers().decode('utf-8'))
-    print(f"[debug] handling event {id}, {headers}, {details}")
-    print(f"[info] handling event {id}, {headers['from']}->{headers['to']}.")
+    print(f"[debug] handling event {id}, {details}")
+    print(f"[info] handling event {id}.")
     try:
-        details['devices'] = api.get_data()
-        proceed_to_deliver(id=id, details=details)
+        if topic == topic_check:
+            details['devices'] = api.get_data()
+            proceed_to_deliver(id=id, details=details)
+        elif topic == topic_add:
+            print(f"details are {details['device']}")
+            api.create_data(details['device'])
     except Exception as e:
         print(f"[error] failed to handle request: {e}")
 
@@ -30,8 +38,7 @@ def consumer_job(args, config):
                 p.offset = OFFSET_BEGINNING
             verifier_consumer.assign(partitions)
 
-    topic = "manager-output-storage"
-    verifier_consumer.subscribe([topic], on_assign=reset_offset)
+    verifier_consumer.subscribe([topic_add, topic_check], on_assign=reset_offset)
     
     try:
         while True:
@@ -44,10 +51,11 @@ def consumer_job(args, config):
                 try:
                     id = msg.key()
                     print("handling ", id)
+                    print(f"topic is {msg.topic()}")
                     details = msg.value().decode('utf-8')
-                    handle_event(id, {"from": details['from'], "to": details['to']}, details=json.loads(details))
+                    handle_event(id, details=json.loads(details), topic=msg.topic())
                 except Exception as e:
-                    print(f"[error] Malformed event received from topic {topic}: {msg.value()}. {e}")
+                    print(f"[error] Malformed event received from topic {msg.topic()}: {msg.value()}. {e}")
     except KeyboardInterrupt:
         pass
     finally:

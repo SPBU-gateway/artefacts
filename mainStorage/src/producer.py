@@ -33,7 +33,7 @@ def producer_job(_, config, requests_queue: multiprocessing.Queue):
 
     while True:
         event_details = requests_queue.get()                
-        producer.produce('main-storage-main-manager-output', json.dumps(event_details), "default", headers={"from": "main-storage", "to": "main-manager-output"}, callback=delivery_callback)
+        producer.produce('main-storage-main-manager-output', json.dumps(event_details), "default".encode('utf-8'), headers={"from": "main-storage", "to": "main-manager-output"}, callback=delivery_callback)
         # Block until the messages are sent.
         producer.poll(10000)
         producer.flush()

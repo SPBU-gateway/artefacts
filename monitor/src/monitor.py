@@ -46,6 +46,6 @@ if __name__ == '__main__':
     config = dict(config_parser['default'])
     
     newTopics(config_parser)
-    # requests_queue = Queue()
-    # start_consumer(args, config)
-    # start_producer(args, config, requests_queue)    
+    requests_queue = Queue()
+    start_consumer(args, config)
+    start_producer(args, config, requests_queue)    

@@ -1,4 +1,3 @@
-# Network start этот блок кода должен быть во всех docker-compose.yml файлах
 networks:
   kafka-net:
     name: kafka-net
@@ -50,18 +49,39 @@ services:
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka-1:19092
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
   
+  monitor:
+    image: monitor
+    build:
+      context: ./monitor
+      dockerfile: Dockerfile
+    networks:
+      - kafka-net
+
+  mainHub:
+    image: main-hub
+    build:
+      context: ./mainHub/src
+    depends_on:
+      - kafka-1
+      - kafka-ui
+    networks:
+      - kafka-net
+    ports:
+      - 8001:8001
+
   mainStorage:
     image: main-storage
     build:
-      context: ./src
+      context: ./mainStorage/src
     depends_on:
       - kafka-1
       - kafka-ui
       - db-main-storage
     networks:
       - kafka-net
+    restart: always
     ports:
-      - "81:81"
+      - 81:81
 
   db-main-storage:
     container_name: db-main-storage
@@ -75,4 +95,40 @@ services:
     ports:
       - 5432:5432
 
-      
+  Storage:
+    image: storage
+    build:
+      context: ./storage/src
+    depends_on:
+      - kafka-1
+      - kafka-ui
+      - db-storage
+    networks:
+      - kafka-net
+    restart: always
+    ports:
+      - 82:82
+
+  db-storage:
+    container_name: db-storage
+    image: postgres:16.1
+    networks:
+      - kafka-net
+    environment:
+      POSTGRES_DB: "Storage"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "1234"
+    ports:
+      - "5433:5432"
+  
+  Hub:
+    image: hub
+    build:
+      context: ./hub/src
+    depends_on:
+      - kafka-1
+      - kafka-ui
+    networks:
+      - kafka-net
+    ports:
+      - 8002:8002

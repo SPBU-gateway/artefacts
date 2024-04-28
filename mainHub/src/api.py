@@ -23,6 +23,7 @@ Base = declarative_base()
 async def create_data(name: Annotated[str, Query(description='name of the message')], message: Annotated[str, Query(description='message value')]):
     device = {"name": name, "message": message}
     print(f"got device: {device}")
+    proceed_to_deliver(device)
     return device
     
 
@@ -34,7 +35,7 @@ def start_fastapi_in_thread(requests_queue=None):
     global _requests_queue
     _requests_queue = requests_queue
     host_name = "0.0.0.0"  
-    port = 80
+    port = 8001
     thread = Thread(target=lambda: run_rest(host_name, port))
     thread.start()
 

@@ -14,7 +14,7 @@ config = {
 _requests_queue: multiprocessing.Queue = None
 
 
-def proceed_to_deliver(details, id=1):
+def proceed_to_deliver(details, id="default"):
     print(f"[debug] queueing for delivery event id: {id}, payload: {details}")
     data = {"device": details}
     _requests_queue.put(data)

@@ -5,21 +5,20 @@ from policies import check_operation
 from producer import proceed_to_deliver
 
 
-def handle_event(id, details):    
+def handle_event(id, details, headers):    
     # print(f"[debug] handling event {id}, {details}")
-    print(f"[info] handling event {id}, {details['from']}->{details['to']}")
-    if check_operation(id, details):
-        proceed_to_deliver(id, details)
+    print(f"[info] handling event {id}, {headers['from']}->{headers['to']}")
+    msg = {'details': details, 'headers': headers, 'id': id}
+    if check_operation(id, headers):
+        proceed_to_deliver(id, msg)
     else:
         msg = "[error] !!!! policies check failed, delivery unauthorized !!! " \
-            f"id: {id}, {details['source']}->{details['deliver_to']}:{details['operation']}"
+            f"id: {id}, {headers['from']}->{headers['to']}"
         print(msg)
         print(f"[error] suspicious event details: {details}")
         security_event = {
             "id": id,
-            "source": "monitor",
-            "operation": "record_event",
-            "message": msg,
+            "source": "monitor",            
             "details": details,
             "deliver_to": "security_events_logger"
         }
@@ -54,11 +53,12 @@ def consumer_job(args, config):
                 try:
                     id = msg.key().decode('utf-8')
                     details_str = msg.value().decode('utf-8')
-                    print("[debug] consumed event from topic {topic}: key = {key:12} value = {value:12}".format(topic=msg.topic(), key=id, value=details_str))
-                    handle_event(id, json.loads(details_str))
+                    hd = dict([(tu[0], tu[1].decode('utf-8')) for tu in msg.headers()])
+                    print(f"[debug] consumed event from topic {topic}: key = {id} value = {details_str} hd = {hd}")
+                    handle_event(id, json.loads(details_str), hd)
                 except Exception as e:
                     print(
-                        f"[error] malformed event received from topic {topic}: {msg.value()}. {e}")
+                        f"[error] malformed event received from topic {topic}: {msg.value().decode('utf-8')}. {e}")
     except KeyboardInterrupt:
         pass
     finally:

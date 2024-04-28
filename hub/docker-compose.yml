@@ -50,8 +50,8 @@ services:
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka-1:19092
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
   
-  mainHub:
-    image: main-hub
+  Hub:
+    image: hub
     build:
       context: ./src
     depends_on:
@@ -60,7 +60,7 @@ services:
     networks:
       - kafka-net
     ports:
-      - "81:81"
+      - 82:82
 
 
       
