@@ -14,7 +14,7 @@ services:
     networks:
       - kafka-net
     ports:
-      - "8001:8001"
+      - "8852:8852"
 
   db-storage:
     container_name: db-storage

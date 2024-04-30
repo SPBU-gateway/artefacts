@@ -12,7 +12,7 @@ services:
     networks:
       - kafka-net
     ports:
-      - "80:80"
+      - "8801:8801"
 
 
       

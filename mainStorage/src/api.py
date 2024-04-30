@@ -81,7 +81,7 @@ def start_fastapi_in_thread(requests_queue=None):
     global _requests_queue
     _requests_queue = requests_queue
     host_name = "0.0.0.0"  # Укажите ваш хост
-    port = 81  # Укажите ваш порт
+    port = 8851  # Укажите ваш порт
     thread = Thread(target=lambda: run_rest(host_name, port))
     thread.start()
 

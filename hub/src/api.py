@@ -29,7 +29,7 @@ def start_fastapi_in_thread(requests_queue=None):
     global _requests_queue
     _requests_queue = requests_queue
     host_name = "0.0.0.0"  
-    port = 8002
+    port = 8802
     thread = Thread(target=lambda: run_rest(host_name, port))
     thread.start()
 
