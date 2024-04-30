@@ -3,7 +3,7 @@ name: 'cloud-service'
 
 services:  
   backend:
-      container_name: CloudService
+      container_name: cloud
       build:
         context: ./src/
       ports:
