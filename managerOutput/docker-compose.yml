@@ -1,0 +1,14 @@
+networks:
+  kafka-net:
+    name: kafka-net
+    driver: bridge
+
+services:
+  managerOutput:
+    image: manager-output
+    build:
+      context: ./src
+    networks:
+      - kafka-net
+    ports:
+      - "5002:5002"
