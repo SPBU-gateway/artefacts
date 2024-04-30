@@ -2,69 +2,54 @@ import base64
 VERIFIER_SEAL = 'verifier_seal'
 
 
-def check_operation(id, details):
+def check_operation(id, headers):
     authorized = False
-    # print(f"[debug] checking policies for event {id}, details: {details}")
+    # print(f"[debug] checking policies for event {id}, headers: {headers}")
     print(f"[info] checking policies for event {id},"
-          f" {details['source']}->{details['deliver_to']}: {details['operation']}")
-    src = details['source']
-    dst = details['deliver_to']
-    operation = details['operation']
+          f" {headers['from']}->{headers['to']}")
+    src = headers['from']
+    dst = headers['to']
 
-    if src == 'data_input' and dst == 'data_processor' \
-        and operation == 'process_new_data':
+    # CE
+    if src == 'main-hub' and dst == 'main-storage' and id == 'default':
         authorized = True
-
-    if src == 'data_processor' and dst == 'data_output' \
-        and operation == 'process_new_events':
+    elif src == 'main-storage' and dst == 'main-manager-output' and id == 'default':
         authorized = True
-
-    if src == 'downloader' and dst == 'manager' \
-            and operation == 'download_done':
+    elif src == 'hub' and dst == 'storage' and id == 'default':
         authorized = True
-    if src == 'manager' and dst == 'downloader' \
-            and operation == 'download_file':
+    elif src == 'storage' and dst == 'manager-output' and id == 'default':
         authorized = True
-    if src == 'manager' and dst == 'storage' \
-            and operation == 'commit_blob':
+    # ASA 
+    # client-auth
+    elif src == 'client-auth' and dst == 'manager-input' and (id == 'default' or id == 'new-device'):
         authorized = True
-    if src == 'manager' and dst == 'verifier' \
-            and operation == 'verification_requested':
+    elif src == 'client-auth' and dst == 'client-storage' and (id == 'default' or id == 'new-device'):
         authorized = True
-    if src == 'verifier' and dst == 'manager' \
-            and operation == 'handle_verification_result':
+    # client-storage
+    elif src == 'client-storage' and dst == 'client-auth' and (id == 'default' or id == 'new-device'):
         authorized = True
-    if src == 'manager' and dst == 'updater' \
-            and operation == 'proceed_with_update' \
-            and details['verified'] is True:
+    # device-storage
+    elif src == 'device-storage' and dst == 'verifier' and id == 'default':
         authorized = True
-    if src == 'storage' and dst == 'manager' \
-            and operation == 'blob_committed':
+    # main-manager-output
+    elif src == 'main-manager-output' and dst == 'main-storage' and id == 'default':
         authorized = True
-    if src == 'storage' and dst == 'verifier' \
-            and operation == 'blob_committed':
+    elif src == 'main-manager-output' and dst == 'verifier' and (id == 'default' or id == 'new-device'):
         authorized = True
-    if src == 'verifier' and dst == 'storage' \
-            and operation == 'get_blob':
+    # manager-input
+    elif src == 'manager-input' and dst == 'client-auth' and (id == 'default' or id == 'new-device'):
         authorized = True
-    if src == 'verifier' and dst == 'storage' \
-            and operation == 'commit_sealed_blob' \
-            and details['verified'] is True:
+    elif src == 'manager-input' and dst == 'main-manager-output' and (id == 'default' or id == 'new-device'):
         authorized = True
-    if src == 'storage' and dst == 'verifier' \
-            and operation == 'blob_content':
+    elif src == 'manager-input' and dst == 'manager-output' and id == 'default':
         authorized = True
-    if src == 'updater' and dst == 'storage' \
-            and operation == 'get_blob':
+    # verifier
+    elif src == 'verifier' and dst == 'device-storage' and (id == 'default' or id == 'new-device'):
         authorized = True
-    if src == 'storage' and dst == 'updater' \
-            and operation == 'blob_content' and check_payload_seal(details['blob']) is True:
+    elif src == 'verifier' and dst == 'main-manager-output' and id == 'default':
         authorized = True
-    # kea - Kafka events analyzer - an extra service for internal monitoring,
-    # can only communicate with itself
-    if src == 'kea' and dst == 'kea' \
-            and (operation == 'self_test' or operation == 'test_param'):
-        authorized = True
+    
+    
 
     return authorized
 
@@ -78,3 +63,4 @@ def check_payload_seal(payload):
     except Exception as e:
         print(f'[error] seal check error: {e}')
         return False
+    

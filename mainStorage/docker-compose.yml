@@ -1,8 +1,9 @@
+# Network start этот блок кода должен быть во всех docker-compose.yml файлах
 networks:
   kafka-net:
     name: kafka-net
     driver: bridge
-
+# Network end
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.6.1
@@ -48,10 +49,30 @@ services:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka-1:19092
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
-
-  monitor:
-    image: monitor
+  
+  mainStorage:
+    image: main-storage
     build:
-      context: .
+      context: ./src
+    depends_on:
+      - kafka-1
+      - kafka-ui
+      - db-main-storage
     networks:
       - kafka-net
+    ports:
+      - "81:81"
+
+  db-main-storage:
+    container_name: db-main-storage
+    image: postgres:16.1
+    networks:
+      - kafka-net
+    environment:
+      POSTGRES_DB: "MainStorage"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "1234"
+    ports:
+      - 5432:5432
+
+      
