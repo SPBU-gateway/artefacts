@@ -18,5 +18,5 @@ headers:
 ```
 ## Принимает Http запрос вида:
 ```
-curl -d '[{"name": "a1", "message": "a1m"}, {"name": "a2", "message": "a2m"}]' -X POST 127.0.0.1:8000/mainhub
+curl -d '[{"name": "vvRNyDH0gbjLyNRILIeZZQ==", "message": "UXv155brNtuLBKzkWCy0uA=="}, {"name": "a2", "message": "a2m"}]' -X POST 127.0.0.1:8801/mainhub
 ```
