@@ -34,6 +34,8 @@ def check_operation(id, headers):
     # main-manager-output
     elif src == 'main-manager-output' and dst == 'main-storage' and id == 'default':
         authorized = True
+    elif src == 'manager-output' and dst == 'storage' and id == 'default':
+        authorized = True
     elif src == 'main-manager-output' and dst == 'verifier' and (id == 'default' or id == 'new-device'):
         authorized = True
     # manager-input
