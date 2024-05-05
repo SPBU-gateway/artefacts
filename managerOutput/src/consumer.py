@@ -2,13 +2,27 @@ import threading
 from confluent_kafka import Consumer, OFFSET_BEGINNING
 import json
 from producer import proceed_to_deliver
+import requests
 
-def handle_event(id: str, details: dict) :
+def execute_update(id: str, details: dict):
+    try:
+        # url = details['adress']
+        url = "http://127.0.0.1:8000"
+        response = requests.post(f"{url}/", json=details)
+        print(response.status_code)
+        print(response.text)
+            
+    except Exception as e:
+        print(f"[error] failed to execute update: {e}")
+
+def handle_event(id: str, details: dict):
     print(f"[info] handling event {id}, {details['from']}->{details['to']}")
     try:
         if details['from'] == 'manager-input':
             details['to'] = 'storage'
-        proceed_to_deliver(id, details)
+            proceed_to_deliver(id, details)
+        if details['from'] == 'storage':
+            execute_update(id, details)
     except Exception as e:
         print(f"[error] failed to handle request: {e}")
 
@@ -22,10 +36,9 @@ def consumer_job(args, config):
             manager_output_consumer.assign(partitions)
 
     topic1 = "manager-input-manager-output"
-    manager_output_consumer.subscribe([topic1], on_assign=reset_offset)
-
     topic2 = "storage-manager-output"
-    manager_output_consumer.subscribe([topic2], on_assign=reset_offset)
+
+    manager_output_consumer.subscribe([topic1, topic2], on_assign=reset_offset)
 
     try:
         while True:

@@ -8,11 +8,11 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /code
 
-COPY src/requirements.txt /code/requirements.txt
+COPY requirements.txt /code/requirements.txt
 
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
-COPY .. /code/src
+COPY ../.. /code/src
 
 # Creates a non-root user with an explicit UID and adds permission to access the /app folder
 # RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /manager
