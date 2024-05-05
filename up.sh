@@ -17,4 +17,5 @@ docker compose -f hub/docker-compose.yml up -d --build
 docker compose -f mainHub/docker-compose.yml up -d --build
 docker compose -f mainStorage/docker-compose.yml up -d --build
 docker compose -f storage/docker-compose.yml up -d --build
+docker compose -f managerOutput/docker-compose.yml up -d --build
 docker compose -f cloudService/docker-compose.yml up -d --build
