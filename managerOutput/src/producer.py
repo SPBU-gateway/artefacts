@@ -5,8 +5,8 @@ import json
 
 _requests_queue: multiprocessing.Queue = None
 
-def proceed_to_deliver(details):
-    details['from'] = 'manager-output'
+def proceed_to_deliver(id, details):
+    print(f"[debug] queueing for delivery event id: {id}, payload: {details}")
     _requests_queue.put(details)
 
 def producer_job(_, config, requests_queue: multiprocessing.Queue):
@@ -18,10 +18,9 @@ def producer_job(_, config, requests_queue: multiprocessing.Queue):
         else:
             print(f"[debug] Testing, {msg.value().decode('utf-8')}")
 
-    topic = 'monitor'
     while True:
         event_details = requests_queue.get()
-        producer.produce(topic, json.dumps(event_details), "default", headers={"from": "manager-output", "to": "storage"}, callback=delivery_callback)
+        producer.produce('manager-output-storage', json.dumps(event_details), "default", headers={"from": "manager-output", "to": "storage"}, callback=delivery_callback)
         producer.poll(10000)
         producer.flush()
 

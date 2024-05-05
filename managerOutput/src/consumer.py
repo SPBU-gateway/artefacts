@@ -7,7 +7,8 @@ import requests
 def execute_update(id: str, details: dict):
     try:
         # url = details['adress']
-        url = "http://127.0.0.1:8000"
+        url = "http://cloud:8000"
+        print(f"[info] id: {id}, data: {details}")
         response = requests.post(f"{url}/", json=details)
         print(response.status_code)
         print(response.text)
@@ -15,13 +16,12 @@ def execute_update(id: str, details: dict):
     except Exception as e:
         print(f"[error] failed to execute update: {e}")
 
-def handle_event(id: str, details: dict):
-    print(f"[info] handling event {id}, {details['from']}->{details['to']}")
+def handle_event(id: str, details: dict, topic = str):
+    print(f"[info] handling event {id}, {topic}")
     try:
-        if details['from'] == 'manager-input':
-            details['to'] = 'storage'
+        if topic == 'manager-input-manager-output':
             proceed_to_deliver(id, details)
-        if details['from'] == 'storage':
+        if topic == 'storage-manager-output':
             execute_update(id, details)
     except Exception as e:
         print(f"[error] failed to handle request: {e}")
@@ -52,8 +52,11 @@ def consumer_job(args, config):
                     id = msg.key().decode('utf-8')
                     details = msg.value().decode('utf-8')
                     details = json.loads(details)
-                    handle_event(id, details)
+                    topic = msg.topic()
+                    print(f"topic is {topic}")
+                    handle_event(id, details, topic)
                 except Exception as e:
+                    pass
                     print(f"[error] malformed event received from manager output: {msg.value()}. {e}")
     except KeyboardInterrupt:
         pass
