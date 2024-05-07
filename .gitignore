@@ -2,3 +2,4 @@
 **/.idea/
 
 /mainStorage/venv
+/monitor/src/__pycache__
