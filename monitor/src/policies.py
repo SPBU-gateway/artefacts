@@ -5,11 +5,17 @@ VERIFIER_SEAL = 'verifier_seal'
 def check_operation(id, headers):
     authorized = False
     # print(f"[debug] checking policies for event {id}, headers: {headers}")
-    print(f"[info] checking policies for event {id},"
-          f" {headers['from']}->{headers['to']}")
+    try:    
+        print(f"[info] checking policies for event {id},"
+            f" {headers['from']}->{headers['to']}")
+    except:
+        print("No key or incorrect headers' content.")    
+        return False
+    
     src = headers['from']
     dst = headers['to']
-
+    if id != 'default' and id != 'new-device':
+        return False
     # CE
     if src == 'main-hub' and dst == 'main-storage' and id == 'default':
         authorized = True
@@ -34,6 +40,8 @@ def check_operation(id, headers):
     # main-manager-output
     elif src == 'main-manager-output' and dst == 'main-storage' and id == 'default':
         authorized = True
+    elif src == 'manager-output' and dst == 'storage' and id == 'default':
+        authorized = True
     elif src == 'main-manager-output' and dst == 'verifier' and (id == 'default' or id == 'new-device'):
         authorized = True
     # manager-input
@@ -50,7 +58,6 @@ def check_operation(id, headers):
         authorized = True
     
     
-
     return authorized
 
 

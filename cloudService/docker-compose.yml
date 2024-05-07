@@ -1,0 +1,13 @@
+networks:
+  kafka-net:
+    name: kafka-net
+    driver: bridge
+services:  
+  cloud:
+      container_name: cloud
+      build:
+        context: ./src/
+      ports:
+        - 8000:8000
+      networks:
+      - kafka-net
