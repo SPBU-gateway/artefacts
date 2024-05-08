@@ -18,5 +18,5 @@ headers:
 ```
 ## Принимает Http запрос вида:
 ```
-curl -X 'POST' 'http://127.0.0.1:8802/hub' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"name": "vvRNyDH0gbjLyNRILIeZZQ==", "message": "UXv155brNtuLBKzkWCy0uA=="}'
+curl -X 'POST' 'http://127.0.0.1:8802/hub' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"name": "anyDevice", "message": "some message"}'
 ```
