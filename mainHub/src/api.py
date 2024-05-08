@@ -15,12 +15,15 @@ Base = declarative_base()
 class DeviceDataBase(BaseModel):
     name: str
     message: str
+    
+    def to_dict(self):
+        return {"name": self.name, "message": self.message}
 
 
 @app.post("/mainhub")
 async def create_data(device: DeviceDataBase):
     print(f"Main hub got device: {device}")
-    proceed_to_deliver(device)
+    proceed_to_deliver(device.to_dict())
     return device
     
 
