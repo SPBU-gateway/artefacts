@@ -12,12 +12,18 @@ app = FastAPI()
 Base = declarative_base()
     
 
-# 127.0.0.1:8000/mainhub?name=name&message=message
-@app.get("/hub")
-async def create_data(name: Annotated[str, Query(description='name of the message')], message: Annotated[str, Query(description='message value')]):
-    device = {"name": name, "message": message}
+class DeviceDataBase(BaseModel):
+    name: str
+    message: str    
+    
+    def to_dict(self):
+        return {"name": self.name, "message": self.message}
+
+
+@app.post("/hub")
+async def create_data(device: DeviceDataBase):
     print(f"got device: {device}")
-    proceed_to_deliver(device)
+    proceed_to_deliver(device.to_dict())
     return device
     
 
